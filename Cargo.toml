@@ -1,0 +1,47 @@
+[package]
+authors = ["nathanfaucett@gmail.com"]
+description = "http over webrtc server/client"
+edition = "2021"
+license = "MIT OR Apache-2.0"
+name = "webrtc-http"
+repository = "https://github.com/aicacia/rs-webrtc-http"
+rust-version = "1.82"
+version = "0.1.0"
+
+[lib]
+name = "webrtc_http"
+
+[dependencies]
+webrtc = { version = "0.12", default-features = false }
+dashmap = { version = "6.1", default-features = false }
+bytes = { version = "*", default-features = false }
+rand = { version = "*", default-features = false }
+axum = { version = "0.8.0-rc.1", default-features = false, features = [
+  "tokio",
+  "http1",
+], optional = true }
+tokio = { version = "*", default-features = false }
+
+[dev-dependencies]
+hyper = { version = "*", default-features = false, features = [
+  "http1",
+  "client",
+] }
+http-body-util = { version = "*", default-features = false }
+hyper-util = { version = "*", default-features = false, features = [
+  "http1",
+  "client",
+  "server",
+  "server-graceful",
+] }
+
+[features]
+default = ["axum"]
+
+axum = ["dep:axum"]
+
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3

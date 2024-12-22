@@ -50,8 +50,24 @@ impl RTCListener {
         let remove_streams = pinned_streams.clone();
 
         let mut stream_sender = pinned_streams.entry(stream_id).or_insert_with(move || {
+          let transport_data_channel = pinned_data_channel.clone();
+          let mut max_message_size = if let Some(weak_transport) =
+            block_in_place(move || Handle::current().block_on(transport_data_channel.transport()))
+          {
+            if let Some(transport) = weak_transport.upgrade() {
+              transport.get_capabilities().max_message_size as usize
+            } else {
+              DEFAULT_READ_BUF_SIZE
+            }
+          } else {
+            DEFAULT_READ_BUF_SIZE
+          };
+          if max_message_size <= 4 {
+            max_message_size = DEFAULT_READ_BUF_SIZE - 4;
+          }
+
           // TODO get max message size of transports
-          let (receiver, sender) = simplex(DEFAULT_READ_BUF_SIZE);
+          let (receiver, sender) = simplex(max_message_size);
           let (shutdown_sender, shutdown_receiver) = channel();
 
           tokio::task::spawn(async move {

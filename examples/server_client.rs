@@ -188,7 +188,7 @@ async fn main() -> Result<(), webrtc::Error> {
 
   let client_handle = tokio::spawn(async move {
     if let Some(client) = client_rx.recv().await {
-      let stream = client.connect();
+      let stream = client.connect().await;
       let io = TokioIo::new(stream);
       let (mut sender, conn) = hyper::client::conn::http1::handshake(io)
         .await

@@ -62,9 +62,23 @@ impl RTCClient {
     }
   }
 
-  pub fn connect(&self) -> RTCDataChannelStream {
+  pub async fn connect(&self) -> RTCDataChannelStream {
+    let data_channel = self.data_channel.clone();
+    let mut max_message_size = if let Some(weak_transport) = data_channel.transport().await {
+      if let Some(transport) = weak_transport.upgrade() {
+        transport.get_capabilities().max_message_size as usize
+      } else {
+        DEFAULT_READ_BUF_SIZE
+      }
+    } else {
+      DEFAULT_READ_BUF_SIZE
+    };
+    if max_message_size <= 4 {
+      max_message_size = DEFAULT_READ_BUF_SIZE - 4;
+    }
+
+    let (receiver, sender) = simplex(max_message_size);
     let stream_id = rand::random::<u32>();
-    let (receiver, sender) = simplex(DEFAULT_READ_BUF_SIZE);
     let (shutdown_sender, shutdown_receiver) = channel();
 
     let remove_streams = self.streams.clone();

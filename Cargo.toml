@@ -23,17 +23,17 @@ axum = { version = "0.8.0-rc.1", default-features = false, features = [
 tokio = { version = "*", default-features = false }
 
 [dev-dependencies]
-hyper = { version = "*", default-features = false, features = [
-  "http1",
-  "client",
-] }
-http-body-util = { version = "*", default-features = false }
-hyper-util = { version = "*", default-features = false, features = [
-  "http1",
-  "client",
-  "server",
-  "server-graceful",
-] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+hyper = "*"
+http-body-util = "*"
+hyper-util = { version = "*", features = ["server-graceful"] }
+reqwest = { version = "0.12", features = ["json"] }
+anyhow = "1.0"
+tungstenite = { version = "0.26", features = ["handshake", "native-tls"] }
+dotenvy = "0.15"
+peer = { git = "https://github.com/aicacia/rs-peer.git", rev = "e417777" }
+urlencoding = "2.1"
 
 [features]
 default = ["axum"]

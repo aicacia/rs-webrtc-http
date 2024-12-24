@@ -78,11 +78,9 @@ async fn main() -> anyhow::Result<()> {
           let msg = tungstenite::Message::text(msg_json);
           let pinned_socket = on_signal_socket.clone();
           Box::pin(async move {
-            pinned_socket
-              .lock()
-              .await
-              .write(msg)
-              .expect("failed to write to websocket");
+            let mut ws = pinned_socket.lock().await;
+            ws.write(msg).expect("failed to write to websocket");
+            ws.flush().expect("failed to flush websocket");
           })
         }));
 

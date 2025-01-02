@@ -32,7 +32,7 @@ reqwest = { version = "0.12", features = ["json"] }
 anyhow = "1.0"
 tungstenite = { version = "0.26", features = ["handshake", "native-tls"] }
 dotenvy = "0.15"
-peer = { git = "https://github.com/aicacia/rs-peer.git", rev = "e417777" }
+peer = { git = "https://github.com/aicacia/rs-peer.git", rev = "9f8c624" }
 urlencoding = "2.1"
 
 [features]

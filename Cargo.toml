@@ -36,8 +36,6 @@ webrtc-p2p = "0"
 urlencoding = "2"
 
 [features]
-default = ["axum"]
-
 axum = ["dep:axum"]
 
 [profile.dev]
@@ -45,3 +43,8 @@ opt-level = 1
 
 [profile.dev.package."*"]
 opt-level = 3
+
+[[example]]
+name = "server"
+path = "examples/server.rs"
+required-features = ["axum"]

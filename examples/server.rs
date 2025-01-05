@@ -6,7 +6,6 @@ use dashmap::DashMap;
 use http_body_util::{BodyExt, Full};
 use hyper::service::service_fn;
 use hyper_util::rt::TokioIo;
-use peer::{peer::SignalMessage, Peer, PeerOptions};
 use serde::{Deserialize, Serialize};
 use tokio::sync::Mutex;
 use webrtc::{
@@ -18,6 +17,7 @@ use webrtc::{
   peer_connection::configuration::RTCConfiguration,
 };
 use webrtc_http::server::RTCListener;
+use webrtc_p2p::{peer::SignalMessage, Peer, PeerOptions};
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
